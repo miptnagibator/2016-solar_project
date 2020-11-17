@@ -2,7 +2,7 @@
 # license: GPLv3
 
 from solar_objects import Star, Planet
-
+from solar_stats import*
 
 def read_space_objects_data_from_file(input_filename):
     """Cчитывает данные о космических объектах из файла, создаёт сами объекты
@@ -23,6 +23,10 @@ def read_space_objects_data_from_file(input_filename):
                 star = Star()
                 parse_star_parameters(line, star)
                 objects.append(star)
+            if object_type == "planet":
+                planet = Planet()
+                parse_planet_parameters(line, planet)
+                objects.append(planet)
             else:
                 print("Unknown space object")
 
@@ -43,8 +47,16 @@ def parse_star_parameters(line, star):
     **line** — строка с описание звезды.
     **star** — объект звезды.
     """
-
-    pass  # FIXME: not done yet
+    data = line.split()
+    if data[0] == "Star":
+        star.R = float(data[1])
+        star.color = data[2]
+        star.m = float(data[3])
+        star.x = float(data[4])
+        star.y = float(data[5])
+        star.Vx = float(data[6])
+        star.Vy = float(data[7])
+        pass
 
 def parse_planet_parameters(line, planet):
     """Считывает данные о планете из строки.
@@ -61,10 +73,19 @@ def parse_planet_parameters(line, planet):
     **line** — строка с описание планеты.
     **planet** — объект планеты.
     """
-    pass  # FIXME: not done yet...
+    data = line.split()
+    if data[0] == "Planet":
+        planet.R = float(data[1])
+        planet.color = data[2]
+        planet.m = float(data[3])
+        planet.x = float(data[4])
+        planet.y = float(data[5])
+        planet.Vx = float(data[6])
+        planet.Vy = float(data[7])
+    pass
 
 
-def write_space_objects_data_to_file(output_filename, space_objects):
+def write_space_objects_data_to_file(output_filename, space_objects,):
     """Сохраняет данные о космических объектах в файл.
     Строки должны иметь следующий формат:
     Star <радиус в пикселах> <цвет> <масса> <x> <y> <Vx> <Vy>
@@ -78,9 +99,23 @@ def write_space_objects_data_to_file(output_filename, space_objects):
     with open(output_filename, 'w') as out_file:
         for obj in space_objects:
             print(out_file, "%s %d %s %f" % ('1', 2, '3', 4.5))
-            # FIXME: should store real values
+            if str(obj.type) == 'planet':
+                out_file.write("Planet ")
+            if str(obj.type) == 'star':
+                out_file.write("Star ")
+            out_file.write(str(obj.R)+ " ")
+            out_file.write(str(obj.color)+ " ")
+            out_file.write(str(obj.m)+ " ")
+            out_file.write(str(obj.x)+ " ")
+            out_file.write(str(obj.y)+ " ")
+            out_file.write(str(obj.Vx)+ " ")
+            out_file.write(str(obj.Vy)+ " ")
+            out_file.write(str('\n'))
+            out_file.write(str('\n'))
 
-# FIXME: хорошо бы ещё сделать функцию, сохранающую статистику в заданный файл...
+    n = 1
+    with open('stats.txt', 'w') as out_file:
+        out_file.write(str(space_objects[n].stats))
 
 if __name__ == "__main__":
     print("This module is not for direct call!")

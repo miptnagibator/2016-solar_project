@@ -6,6 +6,7 @@ from tkinter.filedialog import *
 from solar_vis import *
 from solar_model import *
 from solar_input import *
+from solar_stats import *
 
 perform_execution = False
 """Флаг цикличности выполнения расчёта"""
@@ -25,6 +26,9 @@ time_step = None
 space_objects = []
 """Список космических объектов."""
 
+def get_physical_time():
+    global physical_time
+    return physical_time
 
 def execution():
     """Функция исполнения -- выполняется циклически, вызывая обработку всех небесных тел,
@@ -81,6 +85,7 @@ def open_file_dialog():
     in_filename = askopenfilename(filetypes=(("Text file", ".txt"),))
     space_objects = read_space_objects_data_from_file(in_filename)
     max_distance = max([max(abs(obj.x), abs(obj.y)) for obj in space_objects])
+    #print(max_distance)
     calculate_scale_factor(max_distance)
 
     for obj in space_objects:
@@ -142,6 +147,8 @@ def main():
 
     displayed_time = tkinter.StringVar()
     displayed_time.set(str(physical_time) + " seconds gone")
+    #print(str(physical_time))
+    print(displayed_time)
     time_label = tkinter.Label(frame, textvariable=displayed_time, width=30)
     time_label.pack(side=tkinter.RIGHT)
 
